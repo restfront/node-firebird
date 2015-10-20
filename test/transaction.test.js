@@ -13,18 +13,47 @@
     };
 
     describe('tr', function () {
-        it('read transaction shouldn\'t modify data', function(done) {
-            fb.attach(options, function(err, db) {
+        it('read transaction shouldn\'t modify data', function (done) {
+            fb.attach(options, function (err, db) {
                 assert.ifError(err);
 
-                db.transaction(fb.ISOLATION_READ, function(err, transaction) {
+                db.transaction(fb.ISOLATION_READ, function (err, transaction) {
                     assert.ifError(err);
 
-                    transaction.query('INSERT INTO test_table (int_field) VALUES (1) ', function(err) {
+                    transaction.query('INSERT INTO test_table (int_field) VALUES (1) ', function (err) {
                         assert.notEqual(err, null);
                         assert.equal(err.code, 335544361);
 
-                        transaction.commit(function(err) {
+                        transaction.commit(function (err) {
+                            assert.ifError(err);
+                            done();
+                        });
+                    });
+                });
+            });
+        });
+
+        it('should execute block without return value', function (done) {
+            this.timeout(500);
+
+            var sql = "" +
+                "EXECUTE BLOCK " +
+                "AS " +
+                "  DECLARE VARIABLE key BIGINT; " +
+                "BEGIN " +
+                "  key = 1; " +
+                "END";
+
+            fb.attach(options, function (err, db) {
+                assert.ifError(err);
+
+                db.transaction(fb.ISOLATION_READ, function (err, transaction) {
+                    assert.ifError(err);
+
+                    transaction.query(sql, function (err) {
+                        assert.equal(err, null);
+
+                        transaction.commit(function (err) {
                             assert.ifError(err);
                             done();
                         });
