@@ -61,5 +61,39 @@
                 });
             });
         });
+
+        it('can fetch many rows', function (done) {
+            var sql = "" +
+                "EXECUTE BLOCK \n" +
+                "RETURNS (val INTEGER) \n" +
+                "AS \n" +
+                "BEGIN \n" +
+                "  val = 0; \n" +
+                "  WHILE (val < 50000) DO \n" +
+                "  BEGIN \n" +
+                "    val = val + 1; \n" +
+                "    SUSPEND; \n" +
+                "  END \n" +
+                "END";
+
+            fb.attach(options, function (err, db) {
+                assert.ifError(err);
+
+                db.transaction(fb.ISOLATION_READ, function (err, transaction) {
+                    assert.ifError(err);
+
+                    transaction.query(sql, function (err, result) {
+                        assert.equal(err, null);
+                        assert.notEqual(result, null);
+                        assert.equal(result.length, 50000);
+
+                        transaction.commit(function (err) {
+                            assert.ifError(err);
+                            done();
+                        });
+                    });
+                });
+            });
+        });
     });
 })();

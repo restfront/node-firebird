@@ -17,7 +17,7 @@
             fb.attach(options, function (err, db) {
                 if (err) { throw err; }
 
-                db.on('reconnect', function() {
+                db.on('reconnect', function () {
                     done();
                 });
 
