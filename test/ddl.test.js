@@ -5,9 +5,9 @@
     var assert = require('assert');
 
     var options = {
-        host: 'localhost',
+        host: 'rf-server',
         port: '3050',
-        database: 'd:/bases/node_firebird.fdb',
+        database: 'd:/bases/test/node_firebird.fdb',
         user: 'SYSDBA',
         password: 'masterkey'
     };
