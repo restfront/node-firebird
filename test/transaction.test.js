@@ -1,3 +1,4 @@
+/* jshint expr: true, mocha:true */
 (function () {
     'use strict';
 
@@ -13,7 +14,7 @@
     };
 
     describe('tr', function () {
-        it('read transaction shouldn\'t modify data', function (done) {
+        it("read transaction shouldn't modify data", function (done) {
             fb.attach(options, function (err, db) {
                 assert.ifError(err);
 
