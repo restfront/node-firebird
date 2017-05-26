@@ -14,6 +14,8 @@
     };
 
     describe('ddl', function () {
+        after(__clear);
+
         it('should create table', function (done) {
             fb.attach(options, function (err, db) {
                 if (err) { throw err; }
@@ -34,17 +36,17 @@
                 });
             });
         });
+    });
 
-        after(function (done) {
-            fb.attach(options, function (err, db) {
+    function __clear(done) {
+        fb.attach(options, function (err, db) {
+            if (err) { throw err; }
+
+            db.query('DROP TABLE test', function (err, result) {
                 if (err) { throw err; }
 
-                db.query('DROP TABLE test', function (err, result) {
-                    if (err) { throw err; }
-
-                    done();
-                });
+                done();
             });
         });
-    });
+    }
 })();

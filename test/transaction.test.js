@@ -63,7 +63,7 @@
             });
         });
 
-        it('can fetch many rows', function (done) {
+        it('can fetch many rows', (done) => {
             var sql = "" +
                 "EXECUTE BLOCK \n" +
                 "RETURNS (val INTEGER) \n" +
@@ -77,18 +77,18 @@
                 "  END \n" +
                 "END";
 
-            fb.attach(options, function (err, db) {
+            fb.attach(options, (err, db) => {
                 assert.ifError(err);
 
-                db.transaction(fb.ISOLATION_READ, function (err, transaction) {
+                db.transaction(fb.ISOLATION_READ, (err, transaction) => {
                     assert.ifError(err);
 
-                    transaction.query(sql, function (err, result) {
+                    transaction.query(sql, (err, result) => {
                         assert.equal(err, null);
                         assert.notEqual(result, null);
                         assert.equal(result.length, 50000);
 
-                        transaction.commit(function (err) {
+                        transaction.commit((err) => {
                             assert.ifError(err);
                             done();
                         });
