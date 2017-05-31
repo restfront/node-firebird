@@ -155,7 +155,30 @@
             });
         });
 
-        it('big select', (done) => {
+        it('partial simple packets', (done) => {
+            const sql = `
+                SELECT * FROM columns_table
+            `;
+
+            fb.attach(options, (err, db) => {
+                assert.ifError(err);
+
+                db.query(sql, (err, result, columns) => {
+                    assert.equal(err, null);
+                    assert.notEqual(result, null);
+                    assert.notEqual(columns, null);
+                    assert.equal(columns.length, 69);
+
+                    db.detach(function (err) {
+                        assert.ifError(err);
+
+                        done();
+                    });
+                });
+            });
+        });
+
+        it('partial fetch packets', (done) => {
             const sql = `
                 SELECT FIRST(10000) * FROM big_table 
             `;
