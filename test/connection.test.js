@@ -154,5 +154,27 @@
                 });
             });
         });
+
+        it('big select', (done) => {
+            const sql = `
+                SELECT FIRST(10000) * FROM big_table 
+            `;
+
+            fb.attach(options, (err, db) => {
+                assert.ifError(err);
+
+                db.query(sql, (err, result) => {
+                    assert.equal(err, null);
+                    assert.notEqual(result, null);
+                    assert.equal(result.length, 10000);
+
+                    db.detach(function (err) {
+                        assert.ifError(err);
+
+                        done();
+                    });
+                });
+            });
+        });
     });
 })();
